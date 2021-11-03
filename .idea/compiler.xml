@@ -6,6 +6,7 @@
   </component>
   <component name="EclipseCompilerSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SWTKal.Base" options="--add-modules java.base" />
       <module name="SWTKal.SwingGUI" options="--add-modules java.base,java.desktop" />
     </option>
   </component>
