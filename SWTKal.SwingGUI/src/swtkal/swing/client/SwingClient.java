@@ -14,7 +14,7 @@ import swtkal.domain.Person;
 import swtkal.domain.Termin;
 //import swtkal.exceptions.PersonException;
 import swtkal.exceptions.TerminException;
-import swtkal.swing.elements.person.LoginDialog;
+//import swtkal.swing.elements.person.LoginDialog;
 import swtkal.server.SimpleServer;
 
 public class SwingClient extends Client implements ActionListener
@@ -73,7 +73,7 @@ public class SwingClient extends Client implements ActionListener
 	protected Tagesansicht tagesansicht;
 
    // cache for internal frames
-   protected Hashtable<String, JInternalFrame> frames = new Hashtable<String, JInternalFrame>();
+   protected Hashtable<String, JInternalFrame> frames = new Hashtable<>();
 
 	protected SwingClient()
 	{
@@ -263,15 +263,17 @@ public class SwingClient extends Client implements ActionListener
 		gui.setVisible(true);
 		frames.put("Tag", gui);
 
-//		// Listener
-//		listener.addObserver(tagesansicht);
+/*
+		Listener
+		listener.addObserver(tagesansicht);
+*/
 
 		try
 		{
 			gui.setSelected(true);
 		}
 		catch (java.beans.PropertyVetoException ex)
-		{}
+		{ex.printStackTrace();}
 
 		layer.add(gui, 0);
 	}
@@ -282,33 +284,34 @@ public class SwingClient extends Client implements ActionListener
 
 		if (e.getSource().getClass() == JMenuItem.class)
 		{
-			if (c.equals("Termin"))
+			switch (c) {
+				case "Termin" -> neuerTermin();
+
+/*
+			else if (c.equals("ToDo"))
 			{
-				neuerTermin();
 			}
-//			else if (c.equals("ToDo"))
-//			{
-//			}
-//			else if (c.equals("L?schen"))
-//			{
-//			}
-			else if (c.equals("Tag"))
+			else if (c.equals("L?schen"))
 			{
-				tagesAnsicht();
 			}
-//			else if (c.equals("Woche"))
-//			{
-//			}
-//			else if (c.equals("Monat"))
-//			{
-//			}
-//			else if (c.equals("Jahr"))
-//			{
-//			}
-			else if (c.equals("Exit"))
+*/
+				case "Tag" -> tagesAnsicht();
+
+/*
+			else if (c.equals("Woche"))
 			{
-				server.stopServer();
-				System.exit(0);
+			}
+			else if (c.equals("Monat"))
+			{
+			}
+			else if (c.equals("Jahr"))
+			{
+			}
+*/
+				case "Exit" -> {
+					server.stopServer();
+					System.exit(0);
+				}
 			}
 		}
 
@@ -334,7 +337,7 @@ public class SwingClient extends Client implements ActionListener
 			JInternalFrame gui = tagesansicht.getGUI();
 			frames.put("Tag", gui);
 
-			// // Listener
+			// Listener
 			// listener.addObserver(tagesansicht);
 		}
 
@@ -347,7 +350,7 @@ public class SwingClient extends Client implements ActionListener
 			gui.setSelected(true);
 		}
 		catch (java.beans.PropertyVetoException ex)
-		{}
+		{ ex.printStackTrace();}
 
 		layer.add(gui, 0);
 	}

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="JavacSettings">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Eclipse" />
+    <bytecodeTargetLevel target="14" />
+  </component>
+  <component name="EclipseCompilerSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="SWTKal.SwingGUI" options="--add-modules java.datatransfer,java.desktop,java.base --add-exports java.datatransfer/java.awt=ALL-UNNAMED" />
+      <module name="SWTKal.SwingGUI" options="--add-modules java.base,java.desktop" />
     </option>
   </component>
 </project>
