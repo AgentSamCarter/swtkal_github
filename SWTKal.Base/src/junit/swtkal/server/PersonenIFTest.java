@@ -31,7 +31,7 @@ public class PersonenIFTest extends TestCase
 	{
 		TestSuite testSuite =
 			new TestSuite(PersonenIFTest.class.getName());
-		
+		//Test Lukas
 		testSuite.addTest(new PersonenIFTest("testInsert"));
 		testSuite.addTest(new PersonenIFTest("testDelete"));
 		testSuite.addTest(new PersonenIFTest("testUpdate"));
