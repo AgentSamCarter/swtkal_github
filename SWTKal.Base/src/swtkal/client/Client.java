@@ -11,7 +11,7 @@
  *
  */
 package swtkal.client;
-
+/test
 import java.io.*;
 import java.util.Properties;
 
