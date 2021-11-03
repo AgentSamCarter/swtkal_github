@@ -29,15 +29,7 @@ public class PersonenIFTest extends TestCase
 
 	public static Test suite()
 	{
-		TestSuite testSuite =
-			new TestSuite(PersonenIFTest.class.getName());
-		
-		testSuite.addTest(new PersonenIFTest("testInsert"));
-		testSuite.addTest(new PersonenIFTest("testDelete"));
-		testSuite.addTest(new PersonenIFTest("testUpdate"));
-		testSuite.addTest(new PersonenIFTest("testUpdatePasswort"));
-		testSuite.addTest(new PersonenIFTest("testUpdateKuerzel"));
-		testSuite.addTest(new PersonenIFTest("testGetPersonVector"));
+
 				
 		return testSuite;
 	}
