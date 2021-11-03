@@ -1,4 +1,5 @@
-/*****************************************************************************************************
+/*
+***************************************************************************************************
  * 	Project:			SWTKal.Base
  * 	
  *  creation date:		01.08.2007
@@ -8,7 +9,7 @@
  *	date			| 	author		| 	reason for change
  *****************************************************************************************************
  *	01.08.2007		swtUser			initial version
- *
+
  */
 package swtkal.server;
 
@@ -18,7 +19,7 @@ import swtkal.domain.Person;
 import swtkal.domain.Termin;
 import swtkal.exceptions.PersonException;
 import swtkal.exceptions.TerminException;
-import swtkal.server.Server;
+//import swtkal.server.Server;
 
 /*****************************************************************************************************
  * Class SimpleServer is a single-user, memory-based server that can be
@@ -40,7 +41,7 @@ public class SimpleServer extends Server
 	public Map<String, Map<String, Vector<Termin>>> teilnehmerTermine;
 	
 		// verwaltet die Teilnehmer-Termin-Assoziationen
-		// speichert zu jedem Personenkürzel-String eine Map
+		// speichert zu jedem Personenk?rzel-String eine Map
 		// diese Map liefert zu jedem Datums-String einen Vector
 		// dieser Vector enthaelt alle Termine zur Teilnehmerperson am konkreten Datum
 		// analoge Datenstruktur und Interface-Methoden fuer Besitzer-Assoziation einfuegen?	
@@ -50,9 +51,9 @@ public class SimpleServer extends Server
 	 */
 	public SimpleServer()
 	{
-		personen = new HashMap<String, Person>();
-		passwoerter = new HashMap<String,String>();
-		teilnehmerTermine = new HashMap<String, Map<String, Vector<Termin>>>();
+		personen = new HashMap<>();
+		passwoerter = new HashMap<>();
+		teilnehmerTermine = new HashMap<>();
 		try
 		{     //====================================================
 			// administrator as initial default user 
@@ -170,7 +171,7 @@ public class SimpleServer extends Server
 	{
 		logger.fine("Method getPersonVector called");
 		
-		return new Vector<Person>(personen.values());
+		return new Vector<>(personen.values());
 	}
 
 	public void insert(Termin termin) throws TerminException
@@ -187,26 +188,28 @@ public class SimpleServer extends Server
 			
 		}
 
-//		// insert into besitzerTermine
-//		String kuerzel = termin.getBesitzer().getKuerzel();
-//		if (!isPersonKnown(kuerzel))
-//			throw new TerminException("Userid unknown!");
-//		insert(termin, termin.getBesitzer(), besitzerTermine);
+/*
+		insert into besitzerTermine
+		String kuerzel = termin.getBesitzer().getKuerzel();
+		if (!isPersonKnown(kuerzel))
+			throw new TerminException("Userid unknown!");
+		insert(termin, termin.getBesitzer(), besitzerTermine);
+*/
 	}
 
 	private void insert(Termin termin, Person p, Map<String, Map<String, Vector<Termin>>> map)
 	{
 		if (!map.containsKey(p.getKuerzel()))
 		{	// first appointment for this person
-			Vector<Termin> vector = new Vector<Termin>();
+			Vector<Termin> vector = new Vector<>();
 			vector.add(termin);									// only one appointment
-			Map<String, Vector<Termin>> dayMap = new HashMap<String, Vector<Termin>>();
+			Map<String, Vector<Termin>> dayMap = new HashMap<>();
 			dayMap.put(termin.getBeginn().getDateStr(), vector);
 			map.put(p.getKuerzel(), dayMap);
 		}
 		else if (!map.get(p.getKuerzel()).containsKey(termin.getBeginn().getDateStr()))
 		{	// first appointment for this date
-			Vector<Termin> vector = new Vector<Termin>();
+			Vector<Termin> vector = new Vector<>();
 			vector.add(termin);									// only one appointment
 			map.get(p.getKuerzel()).put(termin.getBeginn().getDateStr(), vector);
 		}
@@ -230,11 +233,13 @@ public class SimpleServer extends Server
 			delete(termin, p, teilnehmerTermine);
 		}
 
-//		// delete from besitzerTermine
-//		String kuerzel = termin.getBesitzer().getKuerzel();
-//		if (!personen.containsKey(kuerzel))
-//			throw new TerminException("Userid unknown!");
-//		delete(termin, termin.getBesitzer(), besitzerTermine);
+/*
+ 		delete from besitzerTermine
+		String kuerzel = termin.getBesitzer().getKuerzel();
+		if (!personen.containsKey(kuerzel))
+			throw new TerminException("Userid unknown!");
+		delete(termin, termin.getBesitzer(), besitzerTermine);
+*/
 	}
 
 	private void delete(Termin termin, Person p, Map<String, Map<String, Vector<Termin>>> map)
@@ -277,14 +282,19 @@ public class SimpleServer extends Server
 		}
 		return ter;
 	}
-	
+
+	/***
+	 * delete the appointment based on the id
+	 * @param terminId the id of the appointment
+	 * @throws TerminException in the case if there is no appointment
+	 */
 	public void delete(int terminId) throws TerminException
 	{
 		logger.fine("Deletion of terminId " + terminId);
 		delete(getTermin(terminId));
 	}
-	
-	
+
+
 	public boolean isTerminIdKnown(int terminId)
 	{
 		for (var entry : teilnehmerTermine.entrySet()) {
@@ -315,7 +325,7 @@ public class SimpleServer extends Server
 		if (!isPersonKnown(kuerzel))
 			throw new TerminException("Userid unknown!");
 				
-		Vector<Termin> result = new Vector<Termin>();
+		Vector<Termin> result = new Vector<>();
 				
 		Map<String, Vector<Termin>> map = teilnehmerTermine.get(kuerzel);
 		if (map!=null )
@@ -339,7 +349,7 @@ public class SimpleServer extends Server
 		if (vonDat.isGreater(bisDat)==1)
 			throw new TerminException("Incorrect date interval!");
 		
-		Vector<Termin> result = new Vector<Termin>();
+		Vector<Termin> result = new Vector<>();
 
 		Map<String, Vector<Termin>> map = teilnehmerTermine.get(kuerzel);
 		if (map!=null )
