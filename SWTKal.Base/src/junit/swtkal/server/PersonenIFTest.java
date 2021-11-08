@@ -27,9 +27,19 @@ import swtkal.exceptions.PersonException;
 public class PersonenIFTest extends TestCase
 {
 
-	public static void suite()
+	public static Test suite()
 	{
-		System.out.println("hi");
+		TestSuite testSuite =
+			new TestSuite(PersonenIFTest.class.getName());
+		//Test Lukas
+		testSuite.addTest(new PersonenIFTest("testInsert"));
+		testSuite.addTest(new PersonenIFTest("testDelete"));
+		testSuite.addTest(new PersonenIFTest("testUpdate"));
+		testSuite.addTest(new PersonenIFTest("testUpdatePasswort"));
+		testSuite.addTest(new PersonenIFTest("testUpdateKuerzel"));
+		testSuite.addTest(new PersonenIFTest("testGetPersonVector"));
+				
+		return testSuite;
 	}
 
 	public PersonenIFTest(String name) { super(name); }
