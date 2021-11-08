@@ -7,97 +7,61 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import java.util.*;
+import java.util.logging.Level;
+
+import java.util.logging.Logger;
 
 import swtkal.client.Client;
 import swtkal.domain.Person;
-//import swtkal.domain.Person;
-import swtkal.domain.Termin;
-//import swtkal.exceptions.PersonException;
-import swtkal.exceptions.TerminException;
-//import swtkal.swing.elements.person.LoginDialog;
-import swtkal.server.SimpleServer;
+
+
 
 public class SwingClient extends Client implements ActionListener
 {
 	private static final long serialVersionUID = -3226733188150527572L;
+	final Logger logger = Logger.getLogger(String.valueOf(SwingClient.class));
+
+
 
 	public static void main(String[] args)
 	{
-		//====================================================
-		SimpleServer test = new SimpleServer();
-		
-		// test Eindeutigkeit id
-		
-		for (var entry : test.teilnehmerTermine.entrySet()) {
-			Map<String, Vector<Termin>> mapTerm= entry.getValue();
-			for (var entryTwo : mapTerm.entrySet()) {
-				Vector<Termin> vector = entryTwo.getValue();
-				for(Termin obj : vector)
-				{
-				    System.out.println(obj.getTerminID());
-				    System.out.println(obj.getId());
-				}
-			}
-		}
-		
-		//test isTerminIdKnown
-		System.out.println(test.isTerminIdKnown(3));
-		
-		//test getTermin
-		try {
-			System.out.println(test.getTermin(1));
-		} catch (TerminException e) {
-			e.printStackTrace();
-		}	
-		    
-		//test delete
-		
-		System.out.println("bevor dem Delete vom Termin 1: " + test.isTerminIdKnown(1));
-		try {
-			test.delete(1);
-		} catch (TerminException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Nach dem Delete: vom Termin 1: " +test.isTerminIdKnown(1));
-		
-		
-		// Real Code
 		new SwingClient().frame.setVisible(true);
 	}
 
 	protected JFrame frame;
-	protected final int INITIAL_WIDTH  = 850;
-	protected final int INITIAL_HEIGHT = 700;
+	protected static final int INITIAL_WIDTH  = 850;
+	protected static final int INITIAL_HEIGHT = 700;
 	protected JLayeredPane layer = new JLayeredPane();
 	protected JLabel statusLabel;
 	protected Tagesansicht tagesansicht;
 
    // cache for internal frames
-   protected Hashtable<String, JInternalFrame> frames = new Hashtable<>();
+   protected HashMap<String, JInternalFrame> frames = new HashMap<>();
 
 	protected SwingClient()
 	{
+
 		server = swtkal.server.Server.getServer();
 		server.startServer();
 		
 		// Look & Feel
 		try
 		{
-//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());			// *** use this for MacOS
 		}
 		catch (Exception exc)
 		{
-			System.err.println("Error loading L&F: " + exc);
+			logger.log(Level.SEVERE,"Error loading L&F: ", exc);
 		}
 
 		// connect
 		try
 		{
 			frame = new JFrame();
-			//LoginDialog connect = new LoginDialog(frame, server);
+
 			user = new Person("SWTKal", "Admin", "ADM"); 
-			//user = connect.getUser();
+
 		}
 		catch (Exception e)
 		{
@@ -263,11 +227,6 @@ public class SwingClient extends Client implements ActionListener
 		gui.setVisible(true);
 		frames.put("Tag", gui);
 
-/*
-		Listener
-		listener.addObserver(tagesansicht);
-*/
-
 		try
 		{
 			gui.setSelected(true);
@@ -280,38 +239,19 @@ public class SwingClient extends Client implements ActionListener
 		
 	public void actionPerformed(ActionEvent e)
 	{
+
 		String c = e.getActionCommand();
 
 		if (e.getSource().getClass() == JMenuItem.class)
 		{
 			switch (c) {
 				case "Termin" -> neuerTermin();
-
-/*
-			else if (c.equals("ToDo"))
-			{
-			}
-			else if (c.equals("L?schen"))
-			{
-			}
-*/
-				case "Tag" -> tagesAnsicht();
-
-/*
-			else if (c.equals("Woche"))
-			{
-			}
-			else if (c.equals("Monat"))
-			{
-			}
-			else if (c.equals("Jahr"))
-			{
-			}
-*/
+				case "Tag" -> dayView();
 				case "Exit" -> {
 					server.stopServer();
 					System.exit(0);
 				}
+				default -> logger.log(Level.WARNING,"Try again");
 			}
 		}
 
@@ -329,7 +269,7 @@ public class SwingClient extends Client implements ActionListener
 		layer.add(gui, 0);
 	}
 
-	protected void tagesAnsicht()
+	protected void dayView()
 	{
 		if (!frames.containsKey("Tag"))
 		{
@@ -337,8 +277,6 @@ public class SwingClient extends Client implements ActionListener
 			JInternalFrame gui = tagesansicht.getGUI();
 			frames.put("Tag", gui);
 
-			// Listener
-			// listener.addObserver(tagesansicht);
 		}
 
 		JInternalFrame gui = frames.get("Tag");
@@ -361,6 +299,7 @@ public class SwingClient extends Client implements ActionListener
 
 	class WindowEventHandler extends WindowAdapter
 	{
+		@Override
 		public void windowClosing(WindowEvent e)
 		{
 			server.stopServer();
